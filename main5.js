@@ -19,6 +19,8 @@ class Product {
 let p1 = new Product("vacuum cleaner", 100);
 let p2 = new Product("pencil", 3);
 let p3 = new Product("bike", 300);
+let p4 = new Product("helmet", 50);
+let p5 = new Product("locker", 100)
 
 
 // Now, let's create a ShoppingCart class, that will contain products
@@ -28,6 +30,10 @@ class ShoppingCart {
 	constructor() {
 		this.products = []; // empty at 
         this.priceArray = [];
+        this.productNameArray = [];
+
+        this.count = {};
+        this.freeItemPrice = 0;
         this.totalPrice = 0
 	}
 
@@ -36,8 +42,48 @@ class ShoppingCart {
 	}
     
     getTotalPrice() {
-        this.priceArray = this.products.map(x => x.price)
-        this.totalPrice = this.priceArray.reduce((a, b) => a + b)
+        this.priceArray = this.products
+            .map(x => x.price)
+                
+        //here i am creating a key for my object when i don't have it (at the beginning my object is empty so i will have to create the key) and then i am assigning a value to this key (the value is undefined because the productNameArray doesn't have a value, so if it is undefined i will set it to 0 and then add 1). Then i am going to the next one, and if a key with the same name already exist i simply access it and add 1 to the existing value, otherwise i create a new key ecc ecc
+        
+//        this.productNameArray
+//            .forEach(x => { this.count[x] = (this.count[x] || 0)+1; });
+//        
+//        console.log(this.count)
+        
+        this.products.forEach(x => {
+            if(this.count[x] === undefined){
+                this.count[x] = 1
+            } else {
+                this.count[x] = this.count[x] + 1
+                if(this.count[x] % 4 === 0) {
+                    this.freeItemPrice += x.price
+                }
+            }
+            
+        })
+        console.log(this.count)
+        console.log(this.freeItemPrice)
+
+//        for (var key in this.count) {
+//            if (this.count.hasOwnProperty(key)) {
+//                
+//                const map = {}
+//                map[key] = Math.floor(this.count[key] / 3)
+//                this.freeItem.push(map)
+//            }
+//        }
+//        console.log(this.freeItem)
+//        console.log(this.products)
+        
+        
+        this.totalPrice = this.priceArray.reduce((a, b) => a + b) - this.freeItemPrice
+        if(this.priceArray.length < 5) {
+            return this.totalPrice
+        } else {
+            return this.totalPrice -= (this.totalPrice * 10) / 100
+        }
     }
 
 	toString() {
@@ -51,12 +97,26 @@ class ShoppingCart {
 let cart = new ShoppingCart();
 cart.addProduct(p1);
 cart.addProduct(p2);
+cart.addProduct(p2);
+cart.addProduct(p2);
+cart.addProduct(p2);
+cart.addProduct(p2);
+cart.addProduct(p2);
+cart.addProduct(p2);
+cart.addProduct(p2);
 cart.addProduct(p3);
+cart.addProduct(p4);
+cart.addProduct(p5);
+cart.addProduct(p5);
+cart.addProduct(p5);
+cart.addProduct(p5);
+
 
 console.log("We have a " + cart);
 
 cart.getTotalPrice();
 console.log("We have a " + cart);
+
 
 
 //1) In ShoppingCart, define a method totalPrice() that returns the total amount of the products it contains.
